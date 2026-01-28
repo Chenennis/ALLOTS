@@ -1,0 +1,19 @@
+# FlexOffer测试配置 - 4Manager + MAPPO
+# Test Configuration - 4Manager + MAPPO
+
+environment:
+  type: "4manager"  # 4manager or 10manager
+  data_dir: "Test/data"
+
+algorithm:
+  name: "mappo"  # mappo, maippo, maddpg, matd3, sqddpg
+  
+modules:
+  aggregation: "LP"  # LP or DP
+  trading: "market_clearing"
+  disaggregation: "proportional"  # proportional or average
+
+training:
+  num_episodes: 10
+  use_gpu: false
+  output_dir: "Test/results/4m_mappo"

@@ -1,0 +1,41 @@
+# FlexOffer测试配置 - 4Manager + Churn
+# Test Configuration - 4Manager with Device Churn
+
+environment:
+  type: "4manager"  # 4manager or 10manager
+  data_dir: "Test/data"
+  time_horizon: 24  # hours
+  time_step: 1.0  # hours
+
+algorithm:
+  name: "ea"  # ea (Environment-Adaptive) for churn support
+  
+modules:
+  aggregation: "LP"  # LP or DP
+  trading: "bidding"  # bidding or market_clearing
+  disaggregation: "proportional"  # proportional or average
+
+# Device churn configuration
+churn:
+  enabled: true
+  preset: "moderate"  # mild, moderate, severe (or specify custom params)
+  # Custom parameters (optional, overrides preset):
+  # trigger_interval: 10  # Churn every 10 episodes
+  # severity_levels: [0.02, 0.05, 0.10]  # 2%, 5%, 10% of devices
+  # severity_probs: [0.6, 0.3, 0.1]  # Probability distribution
+  # min_active_devices: 5  # Minimum devices per manager
+  # seed: 42  # Random seed for reproducibility
+
+# Dec-POMDP configuration (optional)
+dec_pomdp:
+  enable_observation_noise: false
+  observation_noise_std: 0.05
+  enable_information_delay: false
+  delay_steps: 1
+  enable_limited_collaboration: true
+  collaboration_info_limit: 0.3
+
+training:
+  num_episodes: 100
+  use_gpu: false
+  output_dir: "Test/results/4m_ea_churn"

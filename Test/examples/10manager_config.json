@@ -1,0 +1,29 @@
+{
+  "env_name": "10Manager_TestEnv",
+  "time_horizon": 24,
+  "time_step": 1.0,
+  "aggregation_method": "LP",
+  "trading_strategy": "market_clearing",
+  "disaggregation_method": "proportional",
+  "enable_dec_pomdp": true,
+  "observation_noise_std": 0.05,
+  "data_source": "csv",
+  "data_dir": "test/data",
+  "csv_files": {
+    "managers": "test/data/10manager_managers.csv",
+    "users": "test/data/10manager_users.csv",
+    "devices": "test/data/10manager_devices.csv"
+  },
+  "summary": {
+    "managers": 10,
+    "users": 90,
+    "devices": 333,
+    "device_distribution": {
+      "battery": "81 (90%)",
+      "dishwasher": "90 (100%)",
+      "ev": "45 (50%)",
+      "heat_pump": "90 (100%)",
+      "pv": "27 (30%)"
+    }
+  }
+}

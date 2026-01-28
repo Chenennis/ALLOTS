@@ -1,0 +1,19 @@
+# FlexOffer测试配置 - 10Manager + MADDPG + DP
+# Test Configuration - 10Manager + MADDPG + DP
+
+environment:
+  type: "10manager"  # 4manager or 10manager
+  data_dir: "Test/data"
+
+algorithm:
+  name: "maddpg"  # mappo, maippo, maddpg, matd3, sqddpg
+  
+modules:
+  aggregation: "DP"  # LP or DP
+  trading: "market_clearing"
+  disaggregation: "proportional"  # proportional or average
+
+training:
+  num_episodes: 10
+  use_gpu: false
+  output_dir: "Test/results/10m_maddpg_dp"

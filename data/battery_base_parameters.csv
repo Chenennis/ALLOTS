@@ -1,0 +1,14 @@
+# battery base parameters configuration file
+# purpose: used to initialize BatteryParameters class, these parameters are necessary for generating DFO
+# related code: BatteryParameters class in fo_generate/battery_model.py
+# update frequency: update when battery parameters change
+
+battery_id,soc_min,soc_max,p_min,p_max,efficiency,initial_soc,battery_type,capacity_kwh,charging_type,description
+BAT001,0.20,0.90,-100,100,0.95,0.50,fixed storage,200,bidirectional,#large commercial storage battery 1
+BAT002,0.15,0.95,-150,150,0.92,0.60,fixed storage,300,bidirectional,#industrial park storage battery 2
+BAT003,0.25,0.85,-80,80,0.93,0.40,fixed storage,160,bidirectional,#community storage battery 3
+EV001,0.20,0.90,-50,50,0.92,0.35,electric vehicle,75,V2G,#Tesla Model 3 Long Range
+EV002,0.15,0.85,-40,40,0.91,0.45,electric vehicle,60,V2G,#BYD Han EV
+EV003,0.20,0.90,-60,60,0.93,0.30,electric vehicle,100,V2G,#Tesla Model Y Performance
+EV004,0.15,0.85,-30,30,0.90,0.40,electric vehicle,50,unidirectional,#Xiaopeng P5
+EV005,0.20,0.90,-45,45,0.92,0.50,electric vehicle,70,V2G,#Nio ET7

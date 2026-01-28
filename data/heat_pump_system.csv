@@ -1,0 +1,57 @@
+# heat pump system comprehensive data file
+# purpose: contains all configuration parameters and operation data of heat pump systems in the residential area
+# update frequency: parameter part is updated when system configuration changes, scheduling part is updated daily
+# data description:
+# - room_id: room unique identifier (building number-unit number-room number-room type)
+# - physical parameters: physical characteristics of the room (area, volume, etc.)
+# - temperature parameters: temperature set value and limit
+# - device parameters: heat pump performance parameters
+# - time parameters: typical operation period and scheduling information
+
+room_id,room_type,room_area,room_volume,temp_min,temp_max,initial_temp,cop,heat_loss_coef,primary_use_period,secondary_use_period,primary_target_temp,secondary_target_temp,max_power,insulation_level,room_feature,user_type,usage_description
+1-1-101-LR,living_room,30,90,18,28,22,3.2,0.023,07:00-22:00,22:00-07:00,24,20,3500,A_level,large_open_space,residential_type,three-person family main activity area
+1-1-101-MB,master_bedroom,20,60,18,26,22,3.2,0.021,21:00-08:00,08:00-21:00,23,19,2000,A_level,standard_room_with_bathroom,residential_type,couple's bedroom
+1-1-101-SB,secondary_bedroom,15,45,18,26,22,3.2,0.022,20:00-07:00,07:00-20:00,22,19,1500,A_level,standard_room,student_type,child's bedroom
+1-1-101-ST,study,12,36,18,26,22,3.2,0.020,09:00-22:00,22:00-09:00,23,19,1200,A_level,small_room,working_type,home office
+1-1-102-LR,living_room,35,105,18,28,22,3.2,0.023,08:00-23:00,23:00-08:00,24,20,4000,A_level,large_open_space,elderly_type,retirement home living room
+1-1-102-MB,master_bedroom,22,66,18,26,22,3.2,0.021,20:00-08:00,08:00-20:00,23,20,2200,A_level,standard_room_with_bathroom,elderly_type,elderly couple's bedroom
+1-1-102-SB,secondary_bedroom,16,48,18,26,22,3.2,0.022,19:00-07:00,07:00-19:00,22,19,1600,A_level,standard_room,visitor_type,occasional use
+1-2-201-LR,living_room,28,84,18,28,22,3.2,0.024,18:00-23:00,23:00-18:00,24,19,3000,B_level,large_open_space,working_type,double-income family
+1-2-201-MB,master_bedroom,18,54,18,26,22,3.2,0.022,22:00-07:00,07:00-22:00,23,19,1800,B_level,standard_room_with_bathroom,working_type,double-income bedroom
+1-2-202-LR,living_room,32,96,18,28,22,3.2,0.023,all_day,all_day,23,21,3500,A_level,large_open_space,infant_type,family with infants
+1-2-202-MB,master_bedroom,20,60,18,26,22,3.2,0.021,20:00-08:00,08:00-20:00,23,21,2000,A_level,standard_room_with_bathroom,infant_type,infant room
+2-1-101-LR,living_room,40,120,18,28,22,3.2,0.022,07:00-23:00,23:00-07:00,24,20,4500,A_level,duplex_large_open_space,residential_type,large family activity area
+2-1-101-MB,master_bedroom,25,75,18,26,22,3.2,0.020,21:00-08:00,08:00-21:00,23,19,2500,A_level,suite_with_bathroom,residential_type,master bedroom with study
+2-1-101-SB1,secondary_bedroom,18,54,18,26,22,3.2,0.021,20:00-07:00,07:00-20:00,22,19,1800,A_level,standard_room,student_type,high school student room
+2-1-101-SB2,secondary_bedroom,18,54,18,26,22,3.2,0.021,20:00-07:00,07:00-20:00,22,19,1800,A_level,standard_room,student_type,high school student room
+
+# additional notes:
+# 1. room_id format: building number-unit number-room number-room type
+#    - LR: living room
+#    - MB: master bedroom
+#    - SB: secondary bedroom
+#    - ST: study
+# 2. user type description:
+#    - residential type: most of the time at home
+#    - working type: go to work during the day
+#    - elderly type: retired at home, regular schedule
+#    - student type: go out during school time
+#    - infant type: family with infants
+#    - working type: work at home
+# 3. insulation level:
+#    - A level: high insulation, low heat loss coefficient
+#    - B level: standard insulation
+# 4. room feature classification:
+#    - large open space: large area, open space
+#    - duplex large open space: duplex structure large space
+#    - standard room: normal room
+#    - standard room with bathroom: standard room with bathroom
+#    - suite with bathroom: suite with bathroom and additional functional area
+#    - small room: small standard room
+# 5. usage period characteristics:
+#    - main usage period: high temperature requirements, frequent activities
+#    - secondary usage period: can lower temperature, energy saving
+# 6. temperature setting principle:
+#    - infant room temperature fluctuation is small
+#    - elderly room temperature should be slightly higher
+#    - living room temperature range is large, meet different needs

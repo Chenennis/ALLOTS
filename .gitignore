@@ -1,0 +1,96 @@
+# Python cache files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+
+# Virtual environment
+venv/
+env/
+ENV/
+.env
+.venv
+env.bak/
+venv.bak/
+
+# IDE configuration files
+.idea/
+.vscode/
+.cursor/
+*.swp
+*.swo
+
+# Logs and databases
+*.log
+*.sqlite3
+*.db
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ========== Project Specific ==========
+
+# Experiment results (generated during training)
+results/
+Test/results/
+
+# Model checkpoints and saved weights
+*.pt
+*.pth
+*.ckpt
+
+# Data files (generated/intermediate)
+*.npy
+*.npz
+*.emb
+*.mat
+*.pkl
+*.pickle
+
+# Jupyter notebooks checkpoints
+.ipynb_checkpoints/
+*.ipynb
+
+# TensorBoard logs
+runs/
+tensorboard/
+events.out.tfevents.*
+
+# Algorithm-specific generated files
+algorithms/MATD3/SavedLoss/
+algorithms/MATD3/SavedNetwork/
+algorithms/MATD3/SavedResult/
+algorithms/SQDDPG/figures/
+algorithms/AGILE/data/assets/
+algorithms/AGILE/policy_based/data/action_segs/
+algorithms/AGILE/policy_based/envs/create_game/assets/
+algorithms/AGILE/policy_based/envs/create_game/assets_high_res/
+algorithms/AGILE/policy_based/envs/create_game/splits/
+algorithms/AGILE/policy_based/method/embedder/saved_embeddings/
+
+# Test analysis outputs (generated during experiments)
+Test/Ablation/analysis/figures/
+Test/Ablation/analysis/reports/
+Test/hyparameter/analysis/
+Test/hyparameter/logs/
+Test/enhance/results/
+Test/figures/
+
+# Temporary/tool scripts in Test (optional - can be removed if not needed)
+# Test/quick_test.py
+# Test/run_test.py
+# Test/show_10manager_devices.py
+# Test/verify_10manager.py
+# Test/generate_10manager_data.py

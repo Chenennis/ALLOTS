@@ -1,0 +1,14 @@
+# battery DFO generation input parameter file
+# purpose: used to define the time range and constraints for generating DFO
+# related code: BatteryModel.generate_dfo method in fo_generate/battery_model.py
+# update frequency: update when generating DFO
+
+battery_id,time_horizon,start_time,end_time,schedule_type,priority,available_period,target_soc,location,description
+BAT001,24,2024-03-20 00:00:00,2024-03-20 23:00:00,valley-peak arbitrage,2,all day,0.3,commercial area A,commercial area daily scheduling
+BAT002,24,2024-03-20 00:00:00,2024-03-20 23:00:00,demand response,1,all day,0.3,industrial park B,industrial park high priority response
+BAT003,24,2024-03-20 00:00:00,2024-03-20 23:00:00,community peak shaving,3,all day,0.3,residential area C,residential area load balancing
+EV001,24,2024-03-20 00:00:00,2024-03-20 23:00:00,V2G frequency regulation,2,19:00-07:00,0.85,charging station A01,commuting vehicle
+EV002,24,2024-03-20 00:00:00,2024-03-20 23:00:00,V2G peak shaving,3,20:00-06:00,0.80,charging station B03,residential private car
+EV003,24,2024-03-20 00:00:00,2024-03-20 23:00:00,V2G backup,2,18:00-08:00,0.90,charging station C02,business vehicle
+EV004,24,2024-03-20 00:00:00,2024-03-20 23:00:00,unidirectional charging,4,22:00-06:00,0.95,charging station D05,night slow charging vehicle
+EV005,24,2024-03-20 00:00:00,2024-03-20 23:00:00,V2G frequency regulation,2,19:30-07:30,0.85,charging station E04,commuting vehicle
