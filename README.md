@@ -135,50 +135,8 @@ python run_fo_pipeline.py --rl_algorithm fomappo --trading_strategy market_clear
 python run_fo_pipeline.py --rl_algorithm fomappo --trading_strategy bidding
 ```
 
-### Batch Comparison Testing (Including Traditional Optimization Benchmark)
-```bash
-# Windows PowerShell - Complete Comparison of 6 Algorithms
-foreach ($algo in @("fomappo", "fomaippo", "fomaddpg", "fomatd3", "fosqddpg", "fomodelbased")) {
-    if ($algo -eq "fomodelbased") {
-        python run_fo_pipeline.py --rl_algorithm $algo  # No training needed
-    } else {
-        python run_fo_pipeline.py --rl_algorithm $algo --num_episodes 100
-    }
-}
-
-# Linux/Mac Bash - Complete Comparison of 6 Algorithms
-for algo in fomappo fomaippo fomaddpg fomatd3 fosqddpg fomodelbased; do
-    if [ "$algo" = "fomodelbased" ]; then
-        python run_fo_pipeline.py --rl_algorithm $algo  # No training needed
-    else
-        python run_fo_pipeline.py --rl_algorithm $algo --num_episodes 100
-    fi
-done
-```
 
 
-## 📁 Project Structure
-
-```
-ALLOTS/
-├── README.md                   # This document (system overview and basic usage)
-├── SYSTEM_ARCHITECTURE.md      # Detailed system architecture documentation
-├── ALGORITHM_GUIDE.md          # Algorithm usage and configuration guide
-├── DEVELOPER_GUIDE.md          # Developer guide (logs, trading module, etc.)
-├── run_fo_pipeline.py          # Main running script
-├── algorithms/                 # Multi-agent algorithm implementations
-│   ├── MAPPO/fomappo/         # FOMAPPO + FOMAIPPO algorithms
-│   ├── MADDPG/fomaddpg/       # FOMADDPG algorithm
-│   ├── MATD3/fomatd3/         # FOMATD3 algorithm
-│   └── SQDDPG/fosqddpg/       # FOSQDDPG algorithm
-├── fo_generate/               # FlexOffer generation module
-├── fo_aggregate/              # FlexOffer aggregation module
-├── fo_trading/                # FlexOffer trading module
-├── fo_schedule/               # FlexOffer scheduling module
-├── fo_common/                 # Common components
-├── data/                      # Data files
-└── results/                   # Training results
-```
 
 ## 🛠️ Development and Debugging
 
@@ -209,15 +167,4 @@ python run_fo_pipeline.py --rl_algorithm fomappo \
     --save_training_stats \
     --num_episodes 100
 ```
-
-## 🎯 Summary
-
-The ALLOTS system implements a complete FlexOffer multi-agent reinforcement learning solution with the following outstanding features:
-
-- ✅ **Six Complete Algorithms**: 5 MARL algorithms (FOMAPPO, FOMAIPPO, FOMADDPG, FOMATD3, FOSQDDPG)
-- ✅ **40 Combination Configurations**: 5 algorithms × 2 aggregation methods × 2 trading strategies × 2 decomposition methods = 40 fully usable combinations
-- ✅ **Policy Conflict Resolution**: MAIPPO independent policy architecture, avoiding policy conflicts between Managers
-- ✅ **Traditional Optimization Benchmark**: ModelBased provides traditional optimization benchmark comparison without training
-- ✅ **Complete FlexOffer Process**: End-to-end process of generation → aggregation → trading → scheduling
-- ✅ **Experimental Validation**: Actual system validation with 4 Managers + 36 users + 118 devices
 
