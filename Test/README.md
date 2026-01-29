@@ -1,65 +1,8 @@
-# Test - Experimental Framework
+# ALLOTS - Experimental Framework for MARL in Dynamic FlexOffer Environments
 
-This folder contains the complete experimental framework for evaluating multi-agent reinforcement learning (MARL) algorithms in dynamic FlexOffer environments with device churn.
+> 📊 **Experiments**: Comparison Study, Ablation Study, and Hyperparameter Analysis are located in the `Test/` folder. See [`Test/README.md`](Test/README.md) for details.
 
-## 📁 Directory Structure
-
-```
-Test/
-├── README.md                    # This file
-├── EXPERIMENT_GUIDE.md          # Detailed experiment setup guide
-│
-├── Comparison Study Scripts     # 48 scripts (8 algorithms × 2 envs × 3 churns)
-│   ├── 4manager_*_midf_*.py    # 4Manager environment tests
-│   └── 10manager_*_midf_*.py   # 10Manager environment tests
-│
-├── Ablation/                    # Ablation study
-│   ├── agents/                  # EA variants (no_credit, no_pairset, no_tdconsistent)
-│   ├── scripts/                 # Ablation test scripts
-│   ├── scripts_midchurn/        # Mid-episode churn scripts
-│   ├── envs/                    # Mid-episode churn wrapper
-│
-├── hyparameter/                 # Hyperparameter sensitivity analysis
-│   ├── run_*.py                 # Parameter sweep scripts
-│
-├── enhance/                     # Enhanced comparison with mid-episode churn
-│   ├── scripts/                 # Training scripts
-│   └── envs/                    # Environment wrappers
-│
-├── configs/                     # YAML configuration files
-├── data/                        # CSV data (4manager, 10manager)
-└── examples/                    # Example configurations
-```
-
-## 🚀 Quick Start
-
-### 1. Comparison Study
-```bash
-# Run EA algorithm (4Manager, mid churn)
-python Test/4manager_mid_midf_ea.py --episodes 100 --mini_log
-
-# Run baseline algorithms
-python Test/4manager_mid_midf_maddpg.py --episodes 100 --mini_log
-python Test/4manager_mid_midf_mappo.py --episodes 100 --mini_log
-```
-
-### 2. Ablation Study
-```bash
-# Run ablation variants
-python Test/Ablation/run_ablation_no_credit.py --episodes 100
-python Test/Ablation/run_ablation_no_pairset.py --episodes 100
-python Test/Ablation/run_ablation_no_tdconsistent.py --episodes 100
-```
-
-### 3. Hyperparameter Analysis
-```bash
-# Run tau sensitivity
-python Test/hyparameter/run_tau_0.1.py
-python Test/hyparameter/run_tau_1.0.py
-
-# Analyze results
-python Test/hyparameter/analyze_results.py
-```
+This repository contains the complete experimental framework for evaluating multi-agent reinforcement learning (MARL) algorithms in dynamic FlexOffer environments with device churn.
 
 ## 📊 Experiment Overview
 
@@ -105,6 +48,36 @@ Sensitivity analysis on key hyperparameters:
 | τ (advantage temperature) | 0.1, 0.5, 1.0, 2.0, 5.0 | Controls advantage sharpness |
 | h (hidden dimension) | 64, 128, 256 | Network capacity |
 
+## 🚀 Quick Start
+
+### 1. Comparison Study
+```bash
+# Run EA algorithm (4Manager, mid churn)
+python Test/4manager_mid_midf_ea.py --episodes 100 --mini_log
+
+# Run baseline algorithms
+python Test/4manager_mid_midf_maddpg.py --episodes 100 --mini_log
+python Test/4manager_mid_midf_mappo.py --episodes 100 --mini_log
+```
+
+### 2. Ablation Study
+```bash
+# Run ablation variants
+python Test/Ablation/run_ablation_no_credit.py --episodes 100
+python Test/Ablation/run_ablation_no_pairset.py --episodes 100
+python Test/Ablation/run_ablation_no_tdconsistent.py --episodes 100
+```
+
+### 3. Hyperparameter Analysis
+```bash
+# Run tau sensitivity
+python Test/hyparameter/run_tau_0.1.py
+python Test/hyparameter/run_tau_1.0.py
+
+# Analyze results
+python Test/hyparameter/analyze_results.py
+```
+
 ## 🔧 Environment Configuration
 
 ### 4Manager Environment
@@ -119,6 +92,34 @@ Sensitivity analysis on key hyperparameters:
 - **Devices**: 328 (Battery: 76, EV: 45, Heat Pump: 90, Dishwasher: 90, PV: 27)
 - **N_max**: 64 (max devices per manager)
 
+## 📁 Directory Structure
+
+```
+Test/
+├── README.md                    # This file
+├── EXPERIMENT_GUIDE.md          # Detailed experiment setup guide
+│
+├── Comparison Study Scripts     # 48 scripts (8 algorithms × 2 envs × 3 churns)
+│   ├── 4manager_*_midf_*.py    # 4Manager environment tests
+│   └── 10manager_*_midf_*.py   # 10Manager environment tests
+│
+├── Ablation/                    # Ablation study
+│   ├── agents/                  # EA variants (no_credit, no_pairset, no_tdconsistent)
+│   ├── scripts/                 # Ablation test scripts
+│   ├── scripts_midchurn/        # Mid-episode churn scripts
+│   ├── envs/                    # Mid-episode churn wrapper
+│
+├── hyparameter/                 # Hyperparameter sensitivity analysis
+│   ├── run_*.py                 # Parameter sweep scripts
+│
+├── enhance/                     # Enhanced comparison with mid-episode churn
+│   ├── scripts/                 # Training scripts
+│   └── envs/                    # Environment wrappers
+│
+├── configs/                     # YAML configuration files
+├── data/                        # CSV data (4manager, 10manager)
+└── examples/                    # Example configurations
+```
 
 ## 📝 Output Files
 

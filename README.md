@@ -1,170 +1,159 @@
-# ALLOTS: Adaptive Multi-Agent Reinforcement Learning with Variable Observation and Action Spaces
+# ALLOTS - Experimental Framework for MARL in Dynamic FlexOffer Environments
 
 > 📊 **Experiments**: Comparison Study, Ablation Study, and Hyperparameter Analysis are located in the `Test/` folder. See [`Test/README.md`](Test/README.md) for details.
 
-## System Overview
+This repository contains the complete experimental framework for evaluating multi-agent reinforcement learning (MARL) algorithms in dynamic FlexOffer environments with device churn.
 
-**ALLOTS** is a complete platform for FlexOffer (flexibility offer) generation, aggregation, trading, and scheduling based on multi-agent deep reinforcement learning. The system integrates **eight advanced multi-agent RL algorithms** and adopts a Manager-level collaborative architecture to implement an end-to-end energy management solution from device control to market trading.
+## 📊 Experiment Overview
 
-## ✨ Core Features
+### Comparison Study (48 experiments)
 
-### 🤖 Five Fully Integrated Algorithms
-- **MAPPO**: FlexOffer-specialized multi-agent proximal policy optimization (shared policy)
-- **MAIPPO**: FlexOffer multi-agent independent PPO (separate policy)
-- **MADDPG**: FlexOffer multi-agent deep deterministic policy gradient  
-- **MATD3**: FlexOffer multi-agent twin delayed DDPG
-- **SQDDPG**: SQDDPG based on Shapley value fair credit assignment
-- **FOModelBased**: Traditional model-based optimization benchmark (no training required)
+Compares **EA (Environment-Adaptive)** algorithm with 7 baseline MARL methods:
 
-### 🧠 Dec-POMDP Architecture
-- **Decentralized Partially Observable Markov Decision Process**: Real multi-agent environment modeling
-- **3-Layer Observation Architecture**: Private information (40-dim) + Public information (18-dim) + Others' information (15-dim)
-- **Dynamic Observation Quality**: 5-level network quality dynamic adjustment, noise level 5-10%
-- **Information Asymmetry Handling**: Information sharing restrictions between agents, simulating real distributed systems
-- **Observation Function Z Design**: Probabilistic observation model, supporting uncertainty and communication delay
+| Algorithm | Type | Key Feature |
+|-----------|------|-------------|
+| **EA** (Proposed) | Actor-Critic | Per-device advantage weighting, native churn handling |
+| AGILE | Actor-Critic | Action set learning for large discrete spaces |
+| MAAC | Actor-Critic | Multi-agent attention critic |
+| MADDPG | Actor-Critic | Centralized critic, decentralized actors |
+| MATD3 | Actor-Critic | Twin critics, delayed policy updates |
+| SQDDPG | Actor-Critic | Shapley value credit assignment |
+| MAPPO | Policy Gradient | PPO with centralized value function |
+| MAIPPO | Policy Gradient | Independent PPO agents |
 
+**Test Configurations:**
+- **Environments**: 4Manager (36 users, 118 devices) / 10Manager (90 users, 328 devices)
+- **Churn Levels**: Low (10-15%) / Mid (20-25%) / High (30-35%)
+- **Churn Mechanism**: 
+  - Episode-level: Every 5 episodes
+  - **Mid-episode**: At steps 6, 12, 18 (every 6 hours within 24-hour episode)
 
-### 🔧 Device Ecosystem
-- **5 Device Types**: Battery storage, heat pumps, electric vehicles, photovoltaics, dishwashers
-- **118 Devices**: Distributed across 36 users, managed by 4 Managers
-- **Device Deployment Rate**: Dishwashers (100%), Heat pumps (100%), Batteries (67%), EVs (39%), PV (22%)
-- **Intelligent Control**: Each device type has specialized implementation and reward design
+### Ablation Study
 
-## 📊 System Architecture
+Evaluates the contribution of each EA component:
 
-```
-FlexOffer System Four-Layer Architecture
-┌──────────────────────────────────────────────────────────────────────────────────────────── ┐
-│                        Multi-Algorithm Support Layer (6 algorithms)                         │
-├─────────────────────────────────────────────────────────────────────────────────────────────┤
-│ FOMAPPO          │ FOMAIPPO               │ FOMADDPG   │ FOMATD3          │ FOSQDDPG        │            
-│ Shared policy+   │ Independent policy+    │ Actor-     │ Dual Q-network+  │ Shapley value+  │                
-│ Trust region     │ Conflict avoidance     │ Critic     │ Delayed updates  │ Fair allocation │                
-└─────────────────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-┌────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                         Complete FlexOffer Process                                                         │
-├────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│  Generation Layer        │  Aggregation Layer       │  Trading Layer        │  Scheduling Layer            │
-│  fo_generate/            │  fo_aggregate/           │  fo_trading/          │  fo_schedule/                │
-│  Device MDP modeling     │  LP/DP aggregation       │  Market matching      │  Decomposition scheduling    │
-│  Unified environment     │  Manager aggregation     │  Bilateral auction      │  Satisfaction assessment   │
-└────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-                                    │
-┌──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                        Device Ecosystem                                                                          │
-├──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┤
-│ Dishwashers(36)         │ Heat pumps(36)         │ Batteries(24)      │ EVs(14)            │ PV(8)               │
-│ 100% deployment         │ 100% deployment        │ 67% deployment     │ 39% deployment     │ 22% deployment      │
-│ User behavior modeling  │ Temperature control    │ SOC management     │ Charging strategy  │ Generation forecast │
-└──────────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
-```
+| Variant | Removed Component | Tests |
+|---------|-------------------|-------|
+| EA-full | None (baseline) | Per-device advantage + Pair-set critic + TD-consistent |
+| No Credit | Per-device advantage weighting | Uniform weighting |
+| No Pairset | Pair-set critic | Standard critic |
+| No TDconsistent | TD-consistent updates | Standard TD updates |
 
-## 🧠 Algorithm Feature Comparison
+### Hyperparameter Analysis
 
-| Feature | MAPPO | MAIPPO | MADDPG | MATD3 | SQDDPG | 
-|------|---------|----------|----------|---------|----------|--------------|
-| **Algorithm Type** | Policy Gradient | Policy Gradient | Actor-Critic | Actor-Critic | Actor-Critic |
-| **Policy Architecture** | Shared Policy | Independent Policy | Shared Policy | Shared Policy | Shared Policy 
-| **Policy Update** | Batch+Trust Region | Batch+Trust Region | Continuous Policy Gradient | Delayed Policy Update | Continuous+Credit Assignment 
-| **Value Estimation** | Advantage Function | Advantage Function | Single Q-Network | Dual Q-Network | Q-Network+Shapley 
-| **Multi-Agent Collaboration** | Natural Coordination | Mechanism Required | Basic Collaboration | Basic Collaboration | **Fairness Guarantee** 
-| **Policy Conflict Handling** | Weak | Strong | Weak | Weak | Moderate 
-| **Credit Assignment** | Standard Method | Standard Method | Standard Method | Standard Method | **Shapley Value** 
-| **Applicable Scenarios** | Similar Tasks | Diverse Tasks | Continuous Control | High-Noise Environment | Fair Collaboration 
+Sensitivity analysis on key hyperparameters:
+
+| Parameter | Values Tested | Purpose |
+|-----------|--------------|---------|
+| τ (advantage temperature) | 0.1, 0.5, 1.0, 2.0, 5.0 | Controls advantage sharpness |
+| h (hidden dimension) | 64, 128, 256 | Network capacity |
 
 ## 🚀 Quick Start
 
-### Installation Requirements
+### 1. Comparison Study
 ```bash
-# Basic Dependencies
-pip install torch numpy pandas matplotlib gymnasium
+# Run EA algorithm (4Manager, mid churn)
+python Test/4manager_mid_midf_ea.py --episodes 100 --mini_log
 
-# Multi-Agent Environment
-pip install pettingzoo supersuit
-
-# Optional: GPU Support
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+# Run baseline algorithms
+python Test/4manager_mid_midf_maddpg.py --episodes 100 --mini_log
+python Test/4manager_mid_midf_mappo.py --episodes 100 --mini_log
 ```
 
-### Basic Operation
-
-#### 1. Using Default Configuration (Recommended for Beginners)
+### 2. Ablation Study
 ```bash
-# FOMAPPO (Shared Policy, Most Stable)
-python run_fo_pipeline.py --rl_algorithm fomappo --num_episodes 100
-
-# FOMAIPPO (Independent Policy, Avoids Conflicts)
-python run_fo_pipeline.py --rl_algorithm fomaippo --num_episodes 100
+# Run ablation variants
+python Test/Ablation/run_ablation_no_credit.py --episodes 100
+python Test/Ablation/run_ablation_no_pairset.py --episodes 100
+python Test/Ablation/run_ablation_no_tdconsistent.py --episodes 100
 ```
 
-#### 2. Custom Algorithm Combinations (40 Configuration Combinations)
+### 3. Hyperparameter Analysis
 ```bash
-# Complete Parameter Template: 6 algorithms × 2 aggregation × 2 trading × 2 decomposition = 48 theoretical combinations (40 actually available)
-python run_fo_pipeline.py \
-  --rl_algorithm [fomappo|fomaippo|fomaddpg|fomatd3|fosqddpg|fomodelbased] \
-  --aggregation_method [LP|DP] \
-  --trading_strategy [market_clearing|bidding] \
-  --disaggregation_method [average|proportional] \
-  --scheduling_method [priority|fairness|cost] \
-  --num_episodes 100 \  # Not needed for FOModelBased
-  --use_gpu
+# Run tau sensitivity
+python Test/hyparameter/run_tau_0.1.py
+python Test/hyparameter/run_tau_1.0.py
+
+# Analyze results
+python Test/hyparameter/analyze_results.py
 ```
 
-#### 3. Log Verbosity Control (New Feature)
+## 🔧 Environment Configuration
+
+### 4Manager Environment
+- **Managers**: 4
+- **Users**: 36
+- **Devices**: 118 (Battery: 24, EV: 14, Heat Pump: 36, Dishwasher: 36, PV: 8)
+- **N_max**: 44 (max devices per manager)
+
+### 10Manager Environment
+- **Managers**: 10
+- **Users**: 90
+- **Devices**: 328 (Battery: 76, EV: 45, Heat Pump: 90, Dishwasher: 90, PV: 27)
+- **N_max**: 64 (max devices per manager)
+
+## 📁 Directory Structure
+
+```
+Test/
+├── README.md                    # This file
+├── EXPERIMENT_GUIDE.md          # Detailed experiment setup guide
+│
+├── Comparison Study Scripts     # 48 scripts (8 algorithms × 2 envs × 3 churns)
+│   ├── 4manager_*_midf_*.py    # 4Manager environment tests
+│   └── 10manager_*_midf_*.py   # 10Manager environment tests
+│
+├── Ablation/                    # Ablation study
+│   ├── agents/                  # EA variants (no_credit, no_pairset, no_tdconsistent)
+│   ├── scripts/                 # Ablation test scripts
+│   ├── scripts_midchurn/        # Mid-episode churn scripts
+│   ├── envs/                    # Mid-episode churn wrapper
+│
+├── hyparameter/                 # Hyperparameter sensitivity analysis
+│   ├── run_*.py                 # Parameter sweep scripts
+│
+├── enhance/                     # Enhanced comparison with mid-episode churn
+│   ├── scripts/                 # Training scripts
+│   └── envs/                    # Environment wrappers
+│
+├── configs/                     # YAML configuration files
+├── data/                        # CSV data (4manager, 10manager)
+└── examples/                    # Example configurations
+```
+
+## 📝 Output Files
+
+Each experiment generates:
+```
+Test/results/{algorithm}_{env}_{churn}/
+├── training_history.csv    # Episode-by-episode metrics
+├── results.json            # Final results with config
+├── train_*.log             # Detailed training log
+├── model_ep50.pt           # Checkpoint
+└── model_final.pt          # Final model
+```
+
+## ⚙️ Command Line Arguments
+
 ```bash
-# Minimal Mode - Only display key progress information
-python run_fo_pipeline.py --rl_algorithm fomappo --log_verbosity minimal
+python Test/{script}.py [OPTIONS]
 
-# Brief Mode - Merge repeated information into one line (Default)
-python run_fo_pipeline.py --rl_algorithm fomappo --log_verbosity brief
-
-# Detailed Mode - Display all information
-python run_fo_pipeline.py --rl_algorithm fomappo --log_verbosity detailed
-
-# Debug Mode - Display all debug information
-python run_fo_pipeline.py --rl_algorithm fomappo --log_verbosity debug
+OPTIONS:
+  --mode {train,test,both}  # Run mode (default: train)
+  --episodes INT            # Training episodes (default: 100)
+  --mini_log                # Minimal console logging
+  --gpu                     # Enable GPU acceleration
 ```
 
-#### 4. Trading Algorithm Selection (New Feature)
-```bash
-# Using Market Clearing Algorithm (Default)
-python run_fo_pipeline.py --rl_algorithm fomappo --trading_strategy market_clearing
+## 📚 For More Details
 
-# Using Bidding Algorithm
-python run_fo_pipeline.py --rl_algorithm fomappo --trading_strategy bidding
-```
+See **EXPERIMENT_GUIDE.md** for:
+- Complete algorithm configurations
+- Detailed churn mechanism
+- Reward function design
+- Compatibility layer architecture
+- Full test matrix
 
+---
 
-
-
-## 🛠️ Development and Debugging
-
-### Debugging Tools
-```bash
-# System Diagnostics
-python tests/test_components.py --verbose
-
-# Performance Benchmarking  
-python tests/benchmark_global_observation.py
-
-# Algorithm Performance Comparison
-python tests/run_tests.py --benchmark --algorithms fomappo,fomaippo,fosqddpg
-
-# Visualization Analysis
-python run_fo_pipeline.py --rl_algorithm fosqddpg --visualize --save_results
-```
-
-### Logging and Monitoring
-```python
-# Enable Detailed Logging
-import logging
-logging.basicConfig(level=logging.DEBUG)
-
-# Performance Monitoring
-python run_fo_pipeline.py --rl_algorithm fomappo \
-    --enable_monitoring \
-    --save_training_stats \
-    --num_episodes 100
-```
-
+**Last Updated**: January 2026
