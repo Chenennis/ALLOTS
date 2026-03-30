@@ -64,6 +64,9 @@ class EAAgentNoTDConsistent:
         noise_clip: float = 0.2,
         advantage_tau: float = 1.0,
         buffer_capacity: int = 100000,
+        credit_warmup_start: int = 0,
+        credit_warmup_end: int = 0,
+        credit_max_weight: float = 0.15,
         device: str = 'cpu',
     ):
         self.x_dim = x_dim
@@ -78,6 +81,11 @@ class EAAgentNoTDConsistent:
         self.noise_clip = noise_clip
         self.advantage_tau = advantage_tau
         self.device = device
+
+        self.current_episode = 0
+        self.credit_warmup_start = credit_warmup_start
+        self.credit_warmup_end = credit_warmup_end
+        self.credit_max_weight = credit_max_weight
         
         # Create actor (same as original)
         self.actor = SetToSetActor(
@@ -130,7 +138,22 @@ class EAAgentNoTDConsistent:
         logger.info(f"EAAgentNoTDConsistent (Ablation) initialized on device {device}")
         logger.info(f"Actor parameters: {sum(p.numel() for p in self.actor.parameters())}")
         logger.info(f"Critics parameters: {sum(p.numel() for p in self.critics.parameters())}")
-    
+
+    def set_episode(self, episode: int):
+        self.current_episode = episode
+
+    def _get_credit_weight(self) -> float:
+        if self.credit_warmup_start >= self.credit_warmup_end:
+            return self.credit_max_weight
+        if self.current_episode < self.credit_warmup_start:
+            return 0.0
+        elif self.current_episode < self.credit_warmup_end:
+            progress = (self.current_episode - self.credit_warmup_start) / \
+                       (self.credit_warmup_end - self.credit_warmup_start)
+            return self.credit_max_weight * progress
+        else:
+            return self.credit_max_weight
+
     def select_action(self, g, X, mask, manager_id, explore=True):
         with torch.no_grad():
             g_t = torch.FloatTensor(g).unsqueeze(0).to(self.device)
@@ -245,7 +268,8 @@ class EAAgentNoTDConsistent:
         uniform_q = (q_per_device * mask).sum(dim=-1) / mask_sum.squeeze(-1)
         advantage_reg = weighted_q - uniform_q
         
-        actor_loss = 0.85 * primary_loss - 0.15 * advantage_reg.mean()
+        credit_weight = self._get_credit_weight()
+        actor_loss = (1.0 - credit_weight) * primary_loss - credit_weight * advantage_reg.mean()
         
         self.actor_optimizer.zero_grad()
         actor_loss.backward()

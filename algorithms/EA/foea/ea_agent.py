@@ -59,6 +59,10 @@ class EAAgent:
         advantage_tau: float = 1.0,  # Temperature for softmax advantage weighting
         # Buffer
         buffer_capacity: int = 100000,
+        # Credit warmup (configurable per environment)
+        credit_warmup_start: int = 100,
+        credit_warmup_end: int = 300,
+        credit_max_weight: float = 0.05,
         # Device
         device: str = 'cpu',
     ):
@@ -151,9 +155,9 @@ class EAAgent:
         
         # Progressive Credit warmup settings
         self.current_episode = 0
-        self.credit_warmup_start = 100     # Start enabling Credit at episode 100
-        self.credit_warmup_end = 300       # Full Credit at episode 300
-        self.credit_max_weight = 0.05      # Maximum Credit weight (reduced from 0.15)
+        self.credit_warmup_start = credit_warmup_start
+        self.credit_warmup_end = credit_warmup_end
+        self.credit_max_weight = credit_max_weight
         
         logger.info(f"EAAgent initialized on device {device}")
         logger.info(f"Actor parameters: {sum(p.numel() for p in self.actor.parameters())}")

@@ -264,6 +264,10 @@ class EAAgentNoCredit:
         }, filepath)
         logger.info(f"Agent saved to {filepath}")
     
+    def set_episode(self, episode):
+        """Compatibility method (no episode-specific behavior in this ablation)."""
+        pass
+
     def load(self, filepath: str):
         checkpoint = torch.load(filepath, map_location=self.device)
         self.actor.load_state_dict(checkpoint['actor_state_dict'])

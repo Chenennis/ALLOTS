@@ -42,6 +42,9 @@ htmlcov/
 
 # ========== Project Specific ==========
 
+# Claude Code
+.claude/
+
 # Experiment results (generated during training)
 results/
 Test/results/
@@ -50,6 +53,7 @@ Test/results/
 *.pt
 *.pth
 *.ckpt
+*.h5
 
 # Data files (generated/intermediate)
 *.npy
@@ -59,14 +63,24 @@ Test/results/
 *.pkl
 *.pickle
 
+# Training result files
+*_train.csv
+*_eval.csv
+*_summary.json
+
 # Jupyter notebooks checkpoints
 .ipynb_checkpoints/
 *.ipynb
 
-# TensorBoard logs
+# TensorBoard / WandB logs
 runs/
 tensorboard/
 events.out.tfevents.*
+wandb/
+
+# Plots and figures
+figures/
+plots/
 
 # Algorithm-specific generated files
 algorithms/MATD3/SavedLoss/
@@ -88,9 +102,18 @@ Test/hyparameter/logs/
 Test/enhance/results/
 Test/figures/
 
-# Temporary/tool scripts in Test (optional - can be removed if not needed)
-# Test/quick_test.py
-# Test/run_test.py
-# Test/show_10manager_devices.py
-# Test/verify_10manager.py
-# Test/generate_10manager_data.py
+# Modified_MPE - guidance docs and experiment notes
+Modified_MPE/Experiment_Summary.md
+Modified_MPE/ModifiedMPE.md
+Modified_MPE/experimentadd.md
+Modified_MPE/rebuttal.md
+
+
+# Multidrone - guidance docs, design notes and documentation
+Multidrone/CONTRIBUTING.md
+Multidrone/MDExperiment_Summary.md
+Multidrone/MultidroneDesign.md
+
+
+# Multidrone - run/monitoring scripts
+Multidrone/*.sh
