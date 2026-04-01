@@ -13,18 +13,19 @@ PADDING_ACTION_DIM = N_MAX_PER * P_DIM  # 10*4=40
 EA_CONFIG = {
     'x_dim': X_DIM, 'g_dim': G_DIM, 'p': P_DIM, 'N_max': N_MAX_PER,
     'num_managers': N_CONTROLLERS, 'emb_dim': 16,
-    'token_dim': 64, 'hidden_dim': 64,
-    'gamma': 0.95, 'tau': 0.005, 'lr_actor': 1e-4, 'lr_critic': 1e-3,
+    'token_dim': 128, 'hidden_dim': 128,
+    'gamma': 0.99, 'tau': 0.005, 'lr_actor': 1e-4, 'lr_critic': 1e-3,
     'policy_delay': 2, 'noise_scale': 0.1, 'noise_clip': 0.2,
     'advantage_tau': 1.0, 'buffer_capacity': 100000, 'batch_size': 256,
+    'credit_warmup_start': 20, 'credit_warmup_end': 80,
     'train_episodes': TRAIN_EPISODES,
 }
 
 MADDPG_CONFIG = {
     'n_agents': N_CONTROLLERS, 'state_dim': PADDING_STATE_DIM,
     'action_dim': PADDING_ACTION_DIM,
-    'lr_actor': 1e-3, 'lr_critic': 1e-3, 'hidden_dim': 64,
-    'gamma': 0.95, 'tau': 0.01, 'noise_scale': 0.1,
+    'lr_actor': 1e-3, 'lr_critic': 1e-3, 'hidden_dim': 128,
+    'gamma': 0.99, 'tau': 0.01, 'noise_scale': 0.1,
     'buffer_capacity': 100000, 'batch_size': 256,
     'train_episodes': TRAIN_EPISODES,
 }
@@ -32,8 +33,8 @@ MADDPG_CONFIG = {
 MATD3_CONFIG = {
     'n_agents': N_CONTROLLERS, 'state_dim': PADDING_STATE_DIM,
     'action_dim': PADDING_ACTION_DIM,
-    'lr_actor': 1e-3, 'lr_critic': 1e-3, 'hidden_dim': 64,
-    'gamma': 0.95, 'tau': 0.005, 'noise_scale': 0.1,
+    'lr_actor': 1e-3, 'lr_critic': 1e-3, 'hidden_dim': 128,
+    'gamma': 0.99, 'tau': 0.005, 'noise_scale': 0.1,
     'buffer_capacity': 100000, 'batch_size': 256,
     'train_episodes': TRAIN_EPISODES,
 }
@@ -41,7 +42,7 @@ MATD3_CONFIG = {
 MAPPO_CONFIG = {
     'n_agents': N_CONTROLLERS, 'state_dim': PADDING_STATE_DIM,
     'action_dim': PADDING_ACTION_DIM,
-    'lr': 3e-4, 'hidden_dim': 64, 'gamma': 0.95, 'gae_lambda': 0.95,
+    'lr': 3e-4, 'hidden_dim': 128, 'gamma': 0.99, 'gae_lambda': 0.95,
     'clip_epsilon': 0.2, 'entropy_coef': 0.01, 'value_loss_coef': 0.5,
     'max_grad_norm': 0.5, 'n_epochs': 10, 'batch_size': 256,
     'train_episodes': TRAIN_EPISODES,
@@ -52,8 +53,8 @@ MAIPPO_CONFIG = {**MAPPO_CONFIG, 'shared_policy': False}
 MAAC_CONFIG = {
     'n_agents': N_CONTROLLERS, 'N_max': N_MAX_PER,
     'device_dim': X_DIM, 'global_dim': G_DIM, 'action_dim': P_DIM,
-    'hidden_dim': 64, 'attend_heads': 4,
-    'lr_actor': 1e-3, 'lr_critic': 1e-3, 'gamma': 0.95, 'tau': 0.005,
+    'hidden_dim': 128, 'attend_heads': 4,
+    'lr_actor': 1e-3, 'lr_critic': 1e-3, 'gamma': 0.99, 'tau': 0.005,
     'noise_scale': 0.1, 'buffer_capacity': 100000, 'batch_size': 256,
     'train_episodes': TRAIN_EPISODES,
 }
@@ -61,8 +62,8 @@ MAAC_CONFIG = {
 SQDDPG_CONFIG = {
     'n_agents': N_CONTROLLERS, 'state_dim': PADDING_STATE_DIM,
     'action_dim': PADDING_ACTION_DIM,
-    'lr_actor': 1e-3, 'lr_critic': 1e-3, 'hidden_dim': 64,
-    'gamma': 0.95, 'tau': 0.005, 'noise_scale': 0.1,
+    'lr_actor': 1e-3, 'lr_critic': 1e-3, 'hidden_dim': 128,
+    'gamma': 0.99, 'tau': 0.005, 'noise_scale': 0.1,
     'buffer_capacity': 100000, 'batch_size': 256, 'sample_size': 5,
     'train_episodes': TRAIN_EPISODES,
 }
@@ -70,8 +71,8 @@ SQDDPG_CONFIG = {
 AGILE_CONFIG = {
     'n_agents': N_CONTROLLERS, 'N_max': N_MAX_PER,
     'device_dim': X_DIM, 'global_dim': G_DIM, 'action_dim': P_DIM,
-    'hidden_dim': 64, 'lr_actor': 3e-4, 'lr_critic': 3e-4,
-    'gamma': 0.95, 'tau': 0.005, 'noise_scale': 0.1,
+    'hidden_dim': 128, 'lr_actor': 3e-4, 'lr_critic': 3e-4,
+    'gamma': 0.99, 'tau': 0.005, 'noise_scale': 0.1,
     'buffer_capacity': 100000, 'batch_size': 256,
     'train_episodes': TRAIN_EPISODES,
 }
@@ -79,12 +80,12 @@ AGILE_CONFIG = {
 _SET_ACTOR_DIMS = {
     'x_dim': X_DIM, 'g_dim': G_DIM, 'p': P_DIM, 'N_max': N_MAX_PER,
     'num_managers': N_CONTROLLERS, 'emb_dim': 16,
-    'token_dim': 64, 'hidden_dim': 64,
+    'token_dim': 128, 'hidden_dim': 128,
 }
 
 MADDPG_SET_CONFIG = {
     **_SET_ACTOR_DIMS,
-    'gamma': 0.95, 'tau': 0.005,
+    'gamma': 0.99, 'tau': 0.005,
     'lr_actor': 1e-4, 'lr_critic': 1e-3,
     'noise_scale': 0.1, 'buffer_capacity': 100000, 'batch_size': 256,
     'train_episodes': TRAIN_EPISODES,
@@ -93,7 +94,7 @@ MADDPG_SET_CONFIG = {
 MAAC_SET_CONFIG = {
     **_SET_ACTOR_DIMS,
     'attend_heads': 4,
-    'gamma': 0.95, 'tau': 0.005,
+    'gamma': 0.99, 'tau': 0.005,
     'lr_actor': 1e-4, 'lr_critic': 1e-3,
     'noise_scale': 0.1, 'buffer_capacity': 100000, 'batch_size': 256,
     'train_episodes': TRAIN_EPISODES,
@@ -101,7 +102,7 @@ MAAC_SET_CONFIG = {
 
 MAPPO_SET_CONFIG = {
     **_SET_ACTOR_DIMS,
-    'gamma': 0.95, 'gae_lambda': 0.95,
+    'gamma': 0.99, 'gae_lambda': 0.95,
     'clip_param': 0.2, 'ppo_epochs': 10, 'mini_batch_size': 64,
     'lr_actor': 3e-4, 'lr_critic': 1e-3,
     'entropy_coef': 0.01, 'value_loss_coef': 0.5, 'max_grad_norm': 0.5,

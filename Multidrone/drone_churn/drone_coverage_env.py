@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.join(project_root, "Multidrone"))
 from Multidrone.drone_churn.churn_config import (
     N_CONTROLLERS, N_INIT_PER, N_MAX_PER, N_WAYPOINTS,
     MAX_DURATION_SECONDS, AGENT_HZ, MIN_ACTIVE_PER,
-    CHURN_TIMES_SEC, COVERAGE_X, COVERAGE_Y, CRUISE_ALTITUDE,
+    CHURN_INTERVAL_SEC, COVERAGE_X, COVERAGE_Y, CRUISE_ALTITUDE,
     FLIGHT_DOME_SIZE, X_DIM, G_DIM, P_DIM, REWARD_WEIGHTS,
 )
 
@@ -42,7 +42,7 @@ class DroneChurnEnv:
         n_waypoints: int = N_WAYPOINTS,
         max_duration: float = MAX_DURATION_SECONDS,
         agent_hz: int = AGENT_HZ,
-        churn_times_sec: List[float] = None,
+        churn_interval_sec: float = CHURN_INTERVAL_SEC,
         churn_rho_range: Tuple[float, float] = (0.10, 0.15),
         reward_weights: Dict[str, float] = None,
         seed: Optional[int] = None,
@@ -53,7 +53,7 @@ class DroneChurnEnv:
         self.n_waypoints = n_waypoints
         self.max_duration = max_duration
         self.agent_hz = agent_hz
-        self.churn_times = churn_times_sec if churn_times_sec is not None else CHURN_TIMES_SEC
+        self.churn_interval_sec = churn_interval_sec
         self.rho_min, self.rho_max = churn_rho_range
         self.reward_weights = reward_weights or REWARD_WEIGHTS
 
@@ -61,8 +61,9 @@ class DroneChurnEnv:
         self.max_steps = int(max_duration * agent_hz)
         self.physics_steps_per_agent_step = 240 // agent_hz  # 240Hz / 40Hz = 6
 
-        # Convert churn times to agent steps
-        self.churn_steps = [int(t * agent_hz) for t in self.churn_times]
+        # Convert churn interval to agent steps and generate churn step set
+        self.churn_interval_steps = max(1, int(churn_interval_sec * agent_hz))
+        self.churn_steps = set(range(self.churn_interval_steps, self.max_steps, self.churn_interval_steps))
 
         self.ctrl_ids = [f"ctrl_{i}" for i in range(n_controllers)]
         self.rng = np.random.RandomState(seed)

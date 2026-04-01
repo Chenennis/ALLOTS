@@ -8,10 +8,10 @@ N_MAX_PER = 10
 N_WAYPOINTS = 50
 MAX_DURATION_SECONDS = 30.0
 AGENT_HZ = 40
-MIN_ACTIVE_PER = 2
+MIN_ACTIVE_PER = 3
 
-# Churn timing: triggered at these seconds into the episode
-CHURN_TIMES_SEC = [10.0, 20.0]
+# Churn timing: interval-based (every CHURN_INTERVAL_SEC seconds)
+CHURN_INTERVAL_SEC = 1.25  # 50 steps at 40Hz → ~23 churn events per 30s episode
 
 # Coverage area
 COVERAGE_X = (0.0, 30.0)
